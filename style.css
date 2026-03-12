@@ -256,9 +256,9 @@ h1, h2, h3, h4, h5, h6 {
 .main-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--grid-gap);
-    padding: 24px;
-    max-width: 1600px;
+    gap: var(--grid-gap, 24px);
+    padding: var(--grid-padding, 24px);
+    max-width: var(--grid-max-width, 1920px);
     margin: 0 auto;
 }
 
@@ -317,15 +317,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   CARDS
+   CARDS - WITH CONFIG.JS VARIABLES
    ======================================== */
 
 .card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    margin-bottom: 8px;
+    gap: var(--card-gap, 12px);
+    padding-top: var(--card-padding-top, 10px);
+    padding-bottom: var(--card-padding-bottom, 10px);
+    padding-left: var(--card-padding-left, 10px);
+    padding-right: var(--card-padding-right, 0px);
+    margin-bottom: var(--card-margin-bottom, 8px);
     background-color: var(--color-surface);
     border-radius: var(--border-radius-card);
     text-decoration: none;
@@ -364,12 +367,13 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
 }
 
+/* Icon container */
 .card .icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: var(--card-icon-size, 24px);
+    height: var(--card-icon-size, 24px);
     flex-shrink: 0;
     transition: transform 0.2s ease;
 }
@@ -385,8 +389,9 @@ h1, h2, h3, h4, h5, h6 {
     object-fit: contain;
 }
 
+/* Card title/text */
 .card .title {
-    font-size: var(--font-size-card);
+    font-size: var(--font-size-card, 14px);
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -395,44 +400,43 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
-   ICON MODES - COM BLACK AUTO-INVERT (ESTILO ANTIGO)
+   ICON MODES - WITH BLACK AUTO-INVERT (ORIGINAL STYLE)
    ======================================== */
 
-/* Mono mode - escala de cinza */
+/* Mono mode - grayscale */
 .icon-mono {
     filter: grayscale(100%) brightness(1);
     opacity: 0.9;
     transition: filter 0.2s ease, opacity 0.2s ease;
 }
 
-/* Black mode - AUTO-INVERT (como na versão antiga) 
-   Ele INVERTE as cores para manter consistência visual */
+/* Black mode - ORIGINAL EFFECT: mono first, then invert
+   This creates a distinctive highlighted look */
 .icon-black {
-    filter: invert(1) brightness(0.9); /* Inverte e ajusta brilho */
+    filter: grayscale(100%) invert(1) brightness(0.9);
     transition: filter 0.2s ease;
 }
 
-/* Ajuste para temas claros - inverte diferente */
+/* Light theme adjustment - less inversion */
 .theme-light .icon-black {
-    filter: invert(0) brightness(0.9); /* Menos inversão no tema claro */
+    filter: grayscale(100%) invert(0) brightness(0.9);
 }
 
-/* Para ícones que já são escuros, o invert(1) clareia eles */
-/* Para ícones que já são claros, o invert(1) escurece eles */
-/* Isso cria uniformidade! */
+/* Dark icons become light, light icons become dark
+   Creates visual uniformity across all icons */
 
-/* Invert mode - inversão pura */
+/* Invert mode - pure inversion */
 .icon-invert {
     filter: invert(1);
     transition: filter 0.2s ease;
 }
 
-/* Color mode - sem filtro */
+/* Color mode - no filter */
 .icon-color {
     filter: none;
 }
 
-/* HOVER EFFECTS - Volta à cor original */
+/* HOVER EFFECTS - Return to original colors */
 .card:hover .icon-mono,
 .card:hover .icon-black,
 .card:hover .icon-invert {
@@ -443,12 +447,12 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.1);
 }
 
-/* Lucide icons no hover */
+/* Lucide icons on hover - use accent color */
 .card:hover [data-lucide] {
     stroke: var(--color-accent) !important;
 }
 
-/* Ajuste para SimpleIcons no hover */
+/* SimpleIcons on hover - remove all filters */
 .card:hover img[src*="simpleicons"] {
     filter: none !important;
 }

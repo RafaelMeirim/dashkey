@@ -170,6 +170,22 @@ function applyStyleOverrides() {
 }
 
 /**
+ * Apply card layout settings from config
+ */
+function applyCardLayout() {
+    const cardSettings = CONFIG.layout?.card || {};
+    
+    // Apply each setting as a CSS variable
+    Object.entries(cardSettings).forEach(([key, value]) => {
+        if (value) {
+            // Convert padding_top to --card-padding-top
+            const cssVar = `--card-${key.replace(/_/g, '-')}`;
+            document.documentElement.style.setProperty(cssVar, value);
+        }
+    });
+}
+
+/**
  * Apply typography settings from config
  */
 function applyTypography() {
@@ -228,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTheme(CONFIG.theme || 'default');
     
     // Apply other settings
+    applyCardLayout();
     applyTypography();
     applyLayout();
     applyBackground();

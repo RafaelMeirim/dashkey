@@ -6,7 +6,7 @@
 const DASHKEY_CONFIG = {
     // Site information
     site_title: "Dashkey",
-    author: "Your Name",
+    author: "Rafael Meirim",
     
     // Locale (language)
     // Options: "en_US" or "pt_BR"
@@ -52,18 +52,6 @@ const DASHKEY_CONFIG = {
             name: "Z-Library",
             icon: "📖",
             url: "https://pt.z-lib.fm/s/{query}/?languages[]=brazilian&extensions[]=EPUB"
-        },
-        {
-            id: "ddg",
-            name: "DuckDuckGo",
-            icon: "🦆",
-            url: "https://duckduckgo.com/?q={query}"
-        },
-        {
-            id: "gl",
-            name: "Google",
-            icon: "G",
-            url: "https://www.google.com/search?q={query}"
         }
     ],
     
@@ -76,11 +64,44 @@ const DASHKEY_CONFIG = {
         font_family: "system-ui, -apple-system, sans-serif"
     },
     
-    // Layout settings
+    // ========================================
+    // LAYOUT SETTINGS
+    // ========================================
     layout: {
+        // Main grid settings
+        // Padding around the main grid
+        grid_padding: "20px",
+        // Maximum width of the grid  
+        // For 6 columns I recommend 1920px, for fewer than 6 columns 1600px
+        grid_max_width: "1600px",
+             
+        // Border radius settings
         border_radius_card: "8px",
         border_radius_launcher: "12px",
-        grid_gap: "24px"
+        
+        // Grid spacing between columns
+        grid_gap: "24px",
+        
+        // ========================================
+        // CARD SPACING SETTINGS
+        // Fine-tune your card appearance here
+        // ========================================
+        card: {
+            // Icon size (width and height)
+            icon_size: "20px",
+            
+            // Space between icon and text
+            gap: "12px",
+            
+            // Individual padding controls
+            padding_top: "8px",     // Space above card content
+            padding_bottom: "8px",  // Space below card content
+            padding_left: "12px",    // Space on the left side
+            padding_right: "0px",    // Space on the right side (0 = flush with edge)
+            
+            // Space between cards
+            margin_bottom: "10px"
+        }
     },
     
     // Background settings

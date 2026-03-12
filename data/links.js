@@ -100,7 +100,8 @@ const DASHKEY_LINKS = {
                 {
                     name: "Fast Speed Test",
                     url: "https://fast.com/",
-                    icon: "lucide-ambulance",
+                    icon: "auto",
+                    iconmode: "black",
                     keywords: ["internet", "speed", "netflix"]
                 }
             ]
