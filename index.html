@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+    <!-- SEO / Robots -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="description" content="Personal favorites dashboard">
+    <meta name="author" content="Dashkey">
+
+    <!-- Dynamic title will be set by JavaScript -->
+    <title>Dashkey</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.min.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Core Configuration Files -->
+    <script src="config.js"></script>
+    <script src="locales/en_US.js"></script>
+    <script src="locales/pt_BR.js"></script>
+    <script src="themes/themes.js"></script>
+    <script src="data/links.js"></script>
+</head>
+<body>
+    <!-- Header with search input -->
+    <header class="header">
+        <!-- Fake input (desktop trigger) -->
+        <input 
+            id="search" 
+            class="search-input-fake" 
+            type="hidden" 
+            placeholder="Search..." 
+            readonly
+        >
+
+        <!-- Real search input -->
+        <div class="search-container">
+            <input
+                type="search"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search favorites..."
+                autocomplete="off"
+                inputmode="search"
+            />
+        </div>
+    </header>
+
+    <!-- Main grid container - will be populated by JavaScript -->
+    <main class="main-grid" id="grid"></main>
+
+    <!-- Launcher (search overlay) -->
+    <div id="launcher" class="launcher hidden">
+        <div class="launcher-box">
+            <!-- Mobile input inside launcher -->
+            <div class="launcher-input-mobile" id="launcherInputMobile">
+                <input 
+                    type="text" 
+                    id="mobileSearchInput" 
+                    placeholder="Search favorites..." 
+                    autocomplete="off" 
+                />
+            </div>
+            
+            <!-- Desktop input display -->
+            <div class="launcher-input-area" id="launcherInput"></div>
+            
+            <!-- Results container -->
+            <div class="launcher-results" id="results"></div>
+        </div>
+    </div>
+
+    <!-- Main Application Script -->
+    <script src="app.min.js"></script>
+</body>
+</html>
