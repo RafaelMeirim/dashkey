@@ -170,6 +170,132 @@ function applyStyleOverrides() {
 }
 
 /**
+ * Apply search settings
+ */
+function applySearchSettings() {
+    const search = CONFIG.search || {};
+    
+    // Update global search config
+    window.SEARCH_CONFIG = {
+        debounce: search.debounce || 0,
+        min_score: search.min_score || 20,
+        fuzzy_threshold: search.fuzzy_threshold || 0.3,
+        max_results: search.max_results || 10,
+        show_history: search.show_history !== false,
+        show_favorites: search.show_favorites !== false
+    };
+
+}
+
+/**
+ * Apply header settings
+ */
+function applyHeaderSettings() {
+    const header = CONFIG.layout?.header || {};
+    const headerEl = document.querySelector('.header');
+    
+    if (!headerEl) return;
+    
+    // Sticky header
+    if (header.sticky === false) {
+        headerEl.style.position = 'static';
+    }
+    
+    // Blur effect
+    if (header.blur === false) {
+        headerEl.style.backdropFilter = 'none';
+        headerEl.style.webkitBackdropFilter = 'none';
+    }
+    
+    // Padding
+    if (header.padding) {
+        headerEl.style.padding = header.padding;
+    }
+
+}
+
+/**
+ * Apply column settings
+ */
+function applyColumnSettings() {
+    const columns = CONFIG.layout?.columns || {};
+    
+    if (columns.min_width) {
+        document.documentElement.style.setProperty('--column-min-width', columns.min_width);
+    }
+    
+    if (columns.flex) {
+        document.documentElement.style.setProperty('--column-flex', columns.flex);
+    }
+
+}
+
+/**
+ * Apply launcher settings
+ */
+function applyLauncherSettings() {
+    const launcher = CONFIG.layout?.launcher || {};
+    const launcherEl = document.getElementById('launcher');
+    
+    if (!launcherEl) return;
+    
+    // Animation type
+    if (launcher.animation) {
+        launcherEl.setAttribute('data-animation', launcher.animation);
+    }
+    
+    // Width
+    if (launcher.width) {
+        document.documentElement.style.setProperty('--launcher-width', launcher.width);
+    }
+    
+    // Blur
+    if (launcher.backdrop_blur) {
+        document.documentElement.style.setProperty('--launcher-blur', launcher.backdrop_blur);
+    }
+
+}
+
+/**
+ * Apply animation settings
+ */
+function applyAnimationSettings() {
+    const animations = CONFIG.animations || {};
+    
+    // Control animation name based on enabled state
+    if (animations.enabled === false) {
+        document.documentElement.style.setProperty('--animation-name', 'none');
+        document.documentElement.style.setProperty('--animation-stagger', '0');
+        document.body.classList.add('no-animations');
+    } else {
+        document.documentElement.style.setProperty('--animation-name', 'fadeInUp');
+        document.documentElement.style.setProperty('--animation-stagger', animations.stagger ? '1' : '0');
+        document.body.classList.remove('no-animations');
+    }
+    
+    // Animation duration
+    if (animations.duration) {
+        document.documentElement.style.setProperty('--animation-duration', animations.duration);
+    }
+
+}
+
+/**
+ * Apply icon settings
+ */
+function applyIconSettings() {
+    const icons = CONFIG.icons || {};
+    
+    // Store icon config globally
+    window.ICON_CONFIG = {
+        lazy_load: icons.lazy_load !== false,
+        fallback: icons.fallback || 'globe',
+        cache: icons.cache !== false
+    };
+
+}
+
+/**
  * Apply card layout settings from config
  */
 function applyCardLayout() {
@@ -243,7 +369,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Apply theme first (most important)
     applyTheme(CONFIG.theme || 'default');
     
-    // Apply other settings
+    // Apply all new settings
+    applySearchSettings();
+    applyHeaderSettings();
+    applyColumnSettings();
+    applyLauncherSettings();
+    applyAnimationSettings();
+    applyIconSettings();
     applyCardLayout();
     applyTypography();
     applyLayout();

@@ -16,10 +16,16 @@ const DASHKEY_CONFIG = {
     // Options: "default", "dracula", "nord", "ocean", "midnight", "light"
     theme: "default",
     
-    // Search settings
+    // ========================================
+    // SEARCH SETTINGS
+    // ========================================
     search: {
-        debounce: 0,  // Delay in ms (0 = instant search)
-        min_score: 20 // Minimum score to show results
+        debounce: 0,                    // Delay in ms (0 = instant)
+        min_score: 20,                   // Minimum score to show results
+        fuzzy_threshold: 0.3,            // How fuzzy the search is (0-1)
+        max_results: 10,                  // Maximum number of results
+        show_history: true,               // Show search history
+        show_favorites: true               // Show most used links
     },
     
     // ========================================
@@ -55,7 +61,9 @@ const DASHKEY_CONFIG = {
         }
     ],
     
-    // Typography settings
+    // ========================================
+    // TYPOGRAPHY SETTINGS
+    // ========================================
     typography: {
         font_size_base: "14px",
         font_size_title: "20px",
@@ -69,51 +77,80 @@ const DASHKEY_CONFIG = {
     // ========================================
     layout: {
         // Main grid settings
-        // Padding around the main grid
         grid_padding: "20px",
-        // Maximum width of the grid  
-        // For 6 columns I recommend 1920px, for fewer than 6 columns 1600px
         grid_max_width: "1600px",
-             
+        grid_gap: "24px",
+        
+        // Column settings
+        columns: {
+            min_width: "250px",
+            flex: "1 1 250px"
+        },
+        
         // Border radius settings
         border_radius_card: "8px",
         border_radius_launcher: "12px",
+        border_radius_input: "12px",
         
-        // Grid spacing between columns
-        grid_gap: "24px",
+        // Header settings
+        header: {
+            sticky: true,           // Fixed header at top
+            blur: true,              // Blur effect on background
+            padding: "20px"           // Header padding
+        },
         
-        // ========================================
-        // CARD SPACING SETTINGS
-        // Fine-tune your card appearance here
-        // ========================================
+        // Launcher settings
+        launcher: {
+            width: "700px",           // Maximum width
+            backdrop_blur: "5px",     // Blur intensity
+            animation: "fade"         // Animation type: scale, fade, slide
+        },
+        
+        // Card settings
         card: {
-            // Icon size (width and height)
             icon_size: "20px",
-            
-            // Space between icon and text
             gap: "12px",
-            
-            // Individual padding controls
-            padding_top: "8px",     // Space above card content
-            padding_bottom: "8px",  // Space below card content
-            padding_left: "12px",    // Space on the left side
-            padding_right: "0px",    // Space on the right side (0 = flush with edge)
-            
-            // Space between cards
+            padding_top: "8px",
+            padding_bottom: "8px",
+            padding_left: "10px",
+            padding_right: "0px",
             margin_bottom: "10px"
         }
     },
     
-    // Background settings
+    // ========================================
+    // ANIMATION SETTINGS
+    // ========================================
+    animations: {
+        enabled: true,               // Enable/disable all animations
+        duration: "0.3s",             // Animation duration
+        stagger: true                 // Stagger effect on columns
+    },
+    
+    // ========================================
+    // ICON SETTINGS
+    // ========================================
+    icons: {
+        lazy_load: true,              // Load icons on demand
+        fallback: "globe",             // Default icon if fails
+        cache: true                    // Local cache of icons
+    },
+    
+    // ========================================
+    // BACKGROUND SETTINGS
+    // ========================================
     background: {
-        image: null,  // Background image URL
+        image: null,                   // Background image URL
         size: "cover",
         position: "center",
         repeat: "no-repeat"
     },
     
-    // Style overrides (overwrites theme)
+    // ========================================
+    // STYLE OVERRIDES
+    // Overwrites theme colors
     // Set to null to use theme defaults
+    // ========================================
     style_overrides: {
         color_bg: null,
         color_surface: null,

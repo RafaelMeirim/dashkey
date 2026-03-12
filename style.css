@@ -1,44 +1,36 @@
-/*
-|--------------------------------------------------------------------------
-| Meirim Dashboard
-|--------------------------------------------------------------------------
-|
-| A lightweight personal dashboard with a powerful launcher-style search.
-|
-| Features
-| --------
-| • Instant launcher search (Spotlight-style)
-| • Smart multi-engine search (!)
-| • Hidden/secret bookmarks (@)
-| • Fuzzy search ranking
-| • Local analytics (most used links)
-| • Search history
-| • Mobile-friendly interface
-|
-| Keyboard Shortcuts
-| ------------------
-| Ctrl + F     → Open search launcher
-| Arrow keys   → Navigate results
-| Enter        → Open selected result
-| Escape       → Close launcher
-| Ctrl + L     → Clear search (dev utility)
-|
-| Special Commands
-| ----------------
-| !term        → Smart multi-search (YouTube, Wikipedia, etc.)
-| @term        → Search secret links
-|
-| Author: Rafael Meirim
-| License: MIT
-|
-*/
-
 /* ========================================
-   CSS VARIABLES - ESTRUTURA CORRETA
+   CSS VARIABLES
    ======================================== */
 
-/* Variáveis base (fallback) */
+/* (fallback) */
 :root {
+    /* Header */
+    --header-position: sticky;
+    --header-sticky: 1;
+    --header-blur: 1;
+    --header-padding: 20px;
+    --header-blur-amount: 8px;
+    --header-blur-enabled: 1;
+    
+    /* Launcher */
+    --launcher-width: 700px;
+    --launcher-blur: 12px;
+    --launcher-animation: scale;
+    
+    /* Columns */
+    --column-min-width: 250px;
+    --column-flex: 1 1 250px;
+    
+    /* Animations */
+    --animations-enabled: 1;
+    --animation-duration: 0.3s;
+    --animation-stagger: 1;
+    --animation-name: fadeInUp;
+    
+    /* Icons */
+    --icon-lazy-load: 1;
+    --icon-cache: 1;
+
     /* Colors - Default dark theme */
     --color-bg: #0f172a;
     --color-surface: #1e293b;
@@ -199,16 +191,16 @@ h1, h2, h3, h4, h5, h6 {
    ======================================== */
 
 .header {
-    position: sticky;
+    position: var(--header-position, sticky);
     top: 0;
     z-index: 10;
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: var(--header-padding, 20px);
     background-color: var(--color-bg);
     border-bottom: 1px solid var(--color-surface);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
+    -webkit-backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     transition: background-color 0.2s ease;
 }
 
@@ -228,7 +220,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-text);
     background-color: var(--color-surface);
     border: 2px solid transparent;
-    border-radius: 9999px;
+    border-radius: var(--border-radius-input, 9999px);
     outline: none;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -263,21 +255,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .column {
-    flex: 1 1 250px;
-    min-width: 250px;
-    animation: fadeInUp 0.3s ease-out;
+    flex: var(--column-flex, 1 1 250px);
+    min-width: var(--column-min-width, 250px);
+    /* Animation controlled by CSS variables */
+    animation-name: var(--animation-name, fadeInUp);
+    animation-duration: var(--animation-duration, 0.3s);
+    animation-timing-function: ease-out;
     animation-fill-mode: both;
+    animation-delay: var(--animation-delay, 0s);
 }
 
-/* Stagger animation for columns */
-.column:nth-child(1) { animation-delay: 0.05s; }
-.column:nth-child(2) { animation-delay: 0.1s; }
-.column:nth-child(3) { animation-delay: 0.15s; }
-.column:nth-child(4) { animation-delay: 0.2s; }
-.column:nth-child(5) { animation-delay: 0.25s; }
-.column:nth-child(6) { animation-delay: 0.3s; }
-.column:nth-child(7) { animation-delay: 0.35s; }
-.column:nth-child(8) { animation-delay: 0.4s; }
+/* Stagger animation using calc() */
+.column:nth-child(1) { --animation-delay: calc(var(--animation-stagger, 1) * 0.05s); }
+.column:nth-child(2) { --animation-delay: calc(var(--animation-stagger, 1) * 0.1s); }
+.column:nth-child(3) { --animation-delay: calc(var(--animation-stagger, 1) * 0.15s); }
+.column:nth-child(4) { --animation-delay: calc(var(--animation-stagger, 1) * 0.2s); }
+.column:nth-child(5) { --animation-delay: calc(var(--animation-stagger, 1) * 0.25s); }
+.column:nth-child(6) { --animation-delay: calc(var(--animation-stagger, 1) * 0.3s); }
+.column:nth-child(7) { --animation-delay: calc(var(--animation-stagger, 1) * 0.35s); }
+.column:nth-child(8) { --animation-delay: calc(var(--animation-stagger, 1) * 0.4s); }
 
 .column-title {
     font-size: var(--font-size-title);
@@ -468,7 +464,7 @@ h1, h2, h3, h4, h5, h6 {
     right: 0;
     bottom: 0;
     background-color: var(--launcher-bg);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(var(--launcher-blur, 12px));
     -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: flex-start;
@@ -492,16 +488,34 @@ h1, h2, h3, h4, h5, h6 {
 
 .launcher-box {
     width: 100%;
-    max-width: 700px;
+    max-width: var(--launcher-width, 700px);
     margin-top: 10vh;
     background-color: var(--launcher-box-bg);
     border: 1px solid var(--launcher-border);
     border-radius: var(--border-radius-launcher);
     overflow: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(var(--launcher-blur, 12px));
+    -webkit-backdrop-filter: blur(var(--launcher-blur, 12px));
     transform: scale(0.95);
     opacity: 0;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform var(--animation-duration, 0.2s) ease, 
+    opacity var(--animation-duration, 0.2s) ease;
+}
+
+/* Animation types */
+.launcher[data-animation="scale"]:not(.hidden) .launcher-box {
+    transform: scale(1);
+}
+
+.launcher[data-animation="fade"]:not(.hidden) .launcher-box {
+    opacity: 1;
+    transform: none;
+}
+
+.launcher[data-animation="slide"]:not(.hidden) .launcher-box {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .launcher:not(.hidden) .launcher-box {
@@ -897,6 +911,15 @@ h1, h2, h3, h4, h5, h6 {
         opacity: 1;
         transform: scale(1);
     }
+}
+
+/* Disable animations if needed */
+body.no-animations *,
+body.no-animations *::before,
+body.no-animations *::after {
+    animation: none !important;
+    transition: none !important;
+    --animation-stagger: 0;
 }
 
 /* ========================================
