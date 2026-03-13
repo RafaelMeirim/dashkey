@@ -357,7 +357,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* On hover, underline stays with text - doesn't expand to column */
 .column:hover .column-title::after {
-    width: 200%;                 /* CHANGED: stays at text width */
+    width: 115%;                 /* CHANGED: stays at text width */
     background: linear-gradient(90deg, 
         var(--color-accent) 0%, 
         var(--color-accent) 90%, 
