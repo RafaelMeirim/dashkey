@@ -58,7 +58,7 @@
 }
 
 /* ========================================
-   THEME CLASSES - DEFINEM AS CORES POR TEMA
+   THEME CLASSES
    ======================================== */
 
 /* Default theme (dark) */
@@ -140,6 +140,56 @@
     --shadow-color: rgba(0, 0, 0, 0.08);
 }
 
+/* Theme indicator */
+.theme-indicator {
+    
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 25%;
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-surface-hover);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .theme-indicator {
+        position: static;
+        transform: none;
+    }
+}
+
+.theme-indicator:hover {
+    opacity: 1;
+    border-color: var(--color-accent);
+}
+
+.theme-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 25%;
+    background: var(--color-accent);
+    transition: background 0.2s ease;
+    border: 2px solid var(--color-text-secondary);
+}
+
+.theme-default .theme-dot { background: #3b82f6; }
+.theme-dracula .theme-dot { background: #ff79c6; }
+.theme-nord .theme-dot { background: #88c0d0; }
+.theme-ocean .theme-dot { background: #4ea5d9; }
+.theme-midnight .theme-dot { background: #5f7e97; }
+.theme-light .theme-dot { background: #c7cbd4; }
+
+
 /* ========================================
    RESET & BASE STYLES
    ======================================== */
@@ -202,6 +252,7 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     -webkit-backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     transition: background-color 0.2s ease;
+    
 }
 
 .search-input-fake {
@@ -211,16 +262,20 @@ h1, h2, h3, h4, h5, h6 {
 .search-container {
     width: 100%;
     max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .search-input {
+    flex: 1;  /* Ocupa todo espaço disponível */
     width: 100%;
     padding: 12px 20px;
     font-size: var(--font-size-input);
     color: var(--color-text);
     background-color: var(--color-surface);
     border: 2px solid transparent;
-    border-radius: var(--border-radius-input, 9999px);
+    border-radius: var(--border-radius-input, 12px);
     outline: none;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

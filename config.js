@@ -15,13 +15,13 @@ const DASHKEY_CONFIG = {
     // Default theme
     // Options: "default", "dracula", "nord", "ocean", "midnight", "light"
     theme: "default",
-    
+    showThemeSwitcher: true, //true or false to hidden button
     // ========================================
     // SEARCH SETTINGS
     // ========================================
     search: {
         debounce: 0,                    // Delay in ms (0 = instant)
-        min_score: 20,                   // Minimum score to show results
+        min_score: 50,                   // Minimum score to show results
         fuzzy_threshold: 0.3,            // How fuzzy the search is (0-1)
         max_results: 10,                  // Maximum number of results
         show_history: true,               // Show search history

@@ -27,7 +27,7 @@
     <script src="locales/pt_BR.js"></script>
     <script src="data/links.js"></script>
 </head>
-<body>
+<body data-theme-switcher="true">
     <!-- Header with search input -->
     <header class="header">
         <!-- Fake input (desktop trigger) -->
@@ -49,8 +49,13 @@
                 autocomplete="off"
                 inputmode="search"
             />
+            
+            <div class="theme-indicator" id="themeIndicator">
+                <div class="theme-dot"></div>
+            </div>
         </div>
     </header>
+
 
     <!-- Main grid container - will be populated by JavaScript -->
     <main class="main-grid" id="grid"></main>

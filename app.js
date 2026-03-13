@@ -44,6 +44,7 @@ const CONFIG = window.DASHKEY_CONFIG || {
     site_title: "Dashkey",
     locale: "en_US",
     theme: "default",
+    showThemeSwitcher: "true",
     search: { debounce: 0, min_score: 20 },
     typography: {},
     layout: {},
@@ -56,6 +57,11 @@ const THEMES = window.DASHKEY_THEMES || {};
 
 // Get links data
 const LINKS = window.DASHKEY_LINKS || { categories: [] };
+
+const THEME_STORAGE_KEY = "dashkey_theme";
+
+// Available themes in order
+const THEMES_LIST = ['default', 'dracula', 'nord', 'ocean', 'midnight', 'light'];
 
 // Translation function
 function t(key) {
@@ -135,7 +141,7 @@ let secretMode = false;
 let secretItems = [];
 
 // ==============================
-// THEME MANAGEMENT - SIMPLIFICADO
+// THEME MANAGEMENT
 // ==============================
 
 /**
@@ -153,6 +159,29 @@ function applyTheme(themeName) {
     
     // Apply style overrides if any
     applyStyleOverrides();
+}
+
+function getSavedTheme() {
+    return localStorage.getItem(THEME_STORAGE_KEY);
+}
+
+function saveTheme(theme) {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+}
+
+function cycleTheme() {
+    const current = getSavedTheme() || CONFIG.theme || 'default';
+
+    let index = THEMES_LIST.indexOf(current);
+    if (index === -1) index = 0;
+
+    index++;
+    if (index >= THEMES_LIST.length) index = 0;
+
+    const nextTheme = THEMES_LIST[index];
+
+    applyTheme(nextTheme);
+    saveTheme(nextTheme);
 }
 
 /**
@@ -367,7 +396,8 @@ function applyBackground() {
 
 document.addEventListener('DOMContentLoaded', function() {    
     // Apply theme first (most important)
-    applyTheme(CONFIG.theme || 'default');
+    const savedTheme = getSavedTheme();
+    applyTheme(savedTheme || CONFIG.theme || 'default');
     
     // Apply all new settings
     applySearchSettings();
@@ -415,6 +445,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set placeholders with translations
     updatePlaceholders();
+    
+    const themeBtn = document.getElementById("themeIndicator");
+
+    if (themeBtn && CONFIG.showThemeSwitcher) {
+        themeBtn.style.display = "flex";
+        themeBtn.addEventListener("click", cycleTheme);
+    }
+
 });
 
 // ==============================
