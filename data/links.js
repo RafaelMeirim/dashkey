@@ -2,6 +2,17 @@
 // ========================================
 // DASHKEY LINKS CONFIGURATION
 // ========================================
+/* 
+
+EXAMPLE:
+{
+    name: "GitHub",
+    url: "https://github.com",
+    icon: "simpleicons-github",  // simpleicons-name, lucide-itens, auto (automatic icon) or direct URL
+    iconmode: "mono",             //optional - mono, black, invert, color (default)
+    keywords: ["git", "code", "repository"]
+}
+*/
 
 const DASHKEY_LINKS = {
     categories: [
