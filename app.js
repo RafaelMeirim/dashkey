@@ -241,6 +241,20 @@ function applyHeaderSettings() {
         headerEl.style.padding = header.padding;
     }
 
+    // Background color
+    if (header.backgroundColor) {
+        headerEl.style.backgroundColor = header.backgroundColor;
+    } else {
+        headerEl.style.backgroundColor = 'var(--color-bg)';
+    }
+    
+    // Border bottom
+    if (header.showBorder === false) {
+        headerEl.style.borderBottom = 'none';
+    } else {
+        headerEl.style.borderBottom = `1px solid ${header.borderColor || 'var(--color-surface)'}`;
+    }
+
 }
 
 /**
@@ -391,6 +405,102 @@ function applyBackground() {
 }
 
 // ==============================
+// COLLAPSE CATEGORIES
+// ==============================
+
+const COLLAPSE_STORAGE_KEY = "dashkey_collapsed";
+
+/**
+ * Load collapsed states from localStorage
+ */
+function loadCollapsedStates() {
+    try {
+        const saved = localStorage.getItem(COLLAPSE_STORAGE_KEY);
+        return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+        console.warn('Failed to load collapse states', e);
+        return {};
+    }
+}
+
+/**
+ * Save collapsed states to localStorage
+ */
+function saveCollapsedStates(states) {
+    try {
+        localStorage.setItem(COLLAPSE_STORAGE_KEY, JSON.stringify(states));
+    } catch (e) {
+        console.warn('Failed to save collapse states', e);
+    }
+}
+
+/**
+ * Toggle category collapse
+ * @param {HTMLElement} columnEl - The column element
+ * @param {string} categoryName - Category name for storage
+ */
+function toggleCollapse(columnEl, categoryName) {
+    const isCollapsed = columnEl.classList.contains('collapsed');
+    
+    if (isCollapsed) {
+        columnEl.classList.remove('collapsed');
+    } else {
+        columnEl.classList.add('collapsed');
+    }
+    
+    // Save state to localStorage
+    const states = loadCollapsedStates();
+    states[categoryName] = !isCollapsed; // true = collapsed
+    saveCollapsedStates(states);
+}
+
+/**
+ * Initialize collapsible categories
+ */
+function initCollapsibleCategories() {
+    const savedStates = loadCollapsedStates();
+    
+    document.querySelectorAll('.column').forEach(column => {
+        const titleEl = column.querySelector('.column-title');
+        const categoryName = titleEl?.textContent?.trim();
+        
+        if (!categoryName) return;
+        
+        // Find category in LINKS data
+        const categoryData = LINKS.categories.find(c => c.name === categoryName);
+        
+        // Only make collapsible if explicitly set to true
+        if (!categoryData?.collapsible) return;
+        
+        // Make title clickable
+        titleEl.classList.add('collapsible');
+        
+        // Add collapse icon
+        const icon = document.createElement('span');
+        icon.className = 'collapse-icon';
+        icon.innerHTML = '▼'; // Down arrow
+        icon.setAttribute('aria-hidden', 'true');
+        titleEl.appendChild(icon);
+        
+        // Apply saved state (priority) or default from config
+        if (savedStates.hasOwnProperty(categoryName)) {
+            if (savedStates[categoryName]) {
+                column.classList.add('collapsed');
+            }
+        } else if (categoryData.collapsed === true) {
+            column.classList.add('collapsed');
+        }
+        
+        // Add click handler
+        titleEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleCollapse(column, categoryName);
+        });
+    });
+}
+
+// ==============================
 // INITIALIZATION
 // ==============================
 
@@ -403,6 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applySearchSettings();
     applyHeaderSettings();
     applyColumnSettings();
+    renderDashboard();
     applyLauncherSettings();
     applyAnimationSettings();
     applyIconSettings();
@@ -465,16 +576,14 @@ function renderDashboard() {
     let html = '';
     
     LINKS.categories.forEach(category => {
-        // Check if category has any non-secret items
-        const hasVisibleItems = category.items.some(item => !item.secret);
-        if (!hasVisibleItems) return;
+        // Skip categories with only secret items
+        const visibleItems = category.items.filter(item => !item.secret);
+        if (visibleItems.length === 0) return;
         
         html += `<section class="column">`;
         html += `<h2 class="column-title">${escapeHtml(category.name)}</h2>`;
         
-        category.items.forEach(item => {
-            if (item.secret) return; // Skip secret items in regular view
-            
+        visibleItems.forEach(item => {
             html += `<a
                 class="card"
                 href="${escapeHtml(item.url)}"
@@ -500,12 +609,17 @@ function renderDashboard() {
     
     elements.grid.innerHTML = html;
     
-    // Re-initialize Lucide icons for new content
+    // Initialize collapse after rendering
+    setTimeout(() => {
+        initCollapsibleCategories();
+    }, 50);
+    
+    // Re-initialize Lucide icons
     setTimeout(() => {
         if (window.lucide) {
             lucide.createIcons();
         }
-    }, 50);
+    }, 100);
 }
 
 // ==============================

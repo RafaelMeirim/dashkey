@@ -247,8 +247,6 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: center;
     padding: var(--header-padding, 20px);
-    background-color: var(--color-bg);
-    border-bottom: 1px solid var(--color-surface);
     backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     -webkit-backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     transition: background-color 0.2s ease;
@@ -337,26 +335,29 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     letter-spacing: -0.02em;
     position: relative;
-    display: inline-block;
+    display: inline-flex;        /* CHANGED: was flex, now inline-flex */
+    align-items: center;
+    width: auto;                 /* ADDED: width auto to fit content */
+    padding-right: 24px;         /* Space for collapse icon */
     transition: color 0.2s ease;
 }
 
-/* Underline that starts filling the entire text width */
+/* Underline that follows text width - like original version */
 .column-title::after {
     content: '';
     position: absolute;
     bottom: -4px;
     left: 0;
-    width: calc(100% + 5px);  /* Starts filling the whole text */
+    width: 100%;                 /* CHANGED: now 100% of the title text */
     height: 2px;
     background-color: var(--color-text-secondary);
     border-radius: 2px;
     transition: width 0.3s ease, background 0.3s ease;
 }
 
-/* On hover, the underline expands to fill the column width */
+/* On hover, underline stays with text - doesn't expand to column */
 .column:hover .column-title::after {
-    width: calc(100% + 50px); /* Expands beyond the text */
+    width: 200%;                 /* CHANGED: stays at text width */
     background: linear-gradient(90deg, 
         var(--color-accent) 0%, 
         var(--color-accent) 90%, 
@@ -365,6 +366,88 @@ h1, h2, h3, h4, h5, h6 {
 
 .column:hover .column-title {
     color: var(--color-accent);
+}
+
+/* ========================================
+   COLLAPSIBLE CATEGORIES
+   ======================================== */
+
+/* Clickable title */
+.column-title.collapsible {
+    cursor: pointer;
+    user-select: none;
+}
+
+.column-title.collapsible:hover {
+    color: var(--color-accent);
+}
+
+/* Collapse icon (arrow) */
+.collapse-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    color: var(--color-text-secondary);
+}
+
+.column-title.collapsible:hover .collapse-icon {
+    opacity: 1;
+    color: var(--color-accent);
+}
+
+/* Rotate arrow when collapsed */
+.column.collapsed .collapse-icon {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+/* Adjust for titles with icon - no need to change underline width */
+.column-title.collapsible::after {
+    width: 100%;                 /* CHANGED: keep at 100% of text */
+}
+
+/* Collapse animation */
+.column .card {
+    transition: opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+}
+
+.column.collapsed .card {
+    opacity: 0;
+    transform: translateY(-10px);
+    margin: 0;
+    padding: 0;
+    height: 0;
+    border: none;
+    pointer-events: none;
+}
+
+/* Slide down animation when expanding */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.column:not(.collapsed) .card {
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Spacing for collapsed categories */
+.column.collapsed {
+    margin-bottom: 8px;
 }
 
 /* ========================================

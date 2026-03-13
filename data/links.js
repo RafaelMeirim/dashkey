@@ -2,15 +2,23 @@
 // ========================================
 // DASHKEY LINKS CONFIGURATION
 // ========================================
-/* 
 
-EXAMPLE:
+/* 
+EXAMPLE FOR ITEMS:
 {
     name: "GitHub",
     url: "https://github.com",
-    icon: "simpleicons-github",  // simpleicons-name, lucide-itens, auto (automatic icon) or direct URL
-    iconmode: "mono",             //optional - mono, black, invert, color (default)
+    icon: "simpleicons-github",  // simpleicons-name, lucide-name, auto, or direct URL
+    iconmode: "mono",            // optional - mono, black, invert, color (default)
     keywords: ["git", "code", "repository"]
+}
+
+EXAMPLE FOR CATEGORIES:
+{
+    name: "Category Name",
+    collapsible: true,           // optional - allows collapsing (default: false)
+    collapsed: false,            // optional - initial state (default: false)
+    items: [ ... ]
 }
 */
 
@@ -21,6 +29,8 @@ const DASHKEY_LINKS = {
         // ========================================
         {
             name: "AI",
+            collapsible: true,        // Can be collapsed
+            collapsed: false,          // Starts expanded
             items: [
                 {
                     name: "ChatGPT",
@@ -64,6 +74,8 @@ const DASHKEY_LINKS = {
         // ========================================
         {
             name: "Finance",
+            collapsible: true,        // Can be collapsed
+            collapsed: true,           // Starts collapsed (saves space)
             items: [
                 {
                     name: "App Sobrou",
@@ -80,6 +92,8 @@ const DASHKEY_LINKS = {
         // ========================================
         {
             name: "Tools",
+            collapsible: true,        // Can be collapsed
+            collapsed: true,          // Starts expanded
             items: [
                 {
                     name: "Gmail",
@@ -123,6 +137,7 @@ const DASHKEY_LINKS = {
         // ========================================
         {
             name: "Examples",
+            collapsible: false,       // Cannot be collapsed (no arrow)
             items: [
                 {
                     name: "GitHub",

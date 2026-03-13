@@ -78,7 +78,7 @@ const DASHKEY_CONFIG = {
     layout: {
         // Main grid settings
         grid_padding: "20px",
-        grid_max_width: "1600px",
+        grid_max_width: "1600px", //more then 5 colluns 1920px
         grid_gap: "24px",
         
         // Column settings
@@ -96,7 +96,10 @@ const DASHKEY_CONFIG = {
         header: {
             sticky: true,           // Fixed header at top
             blur: true,              // Blur effect on background
-            padding: "20px"           // Header padding
+            padding: "20px",           // Header padding
+            backgroundColor: "transparent",
+            showBorder: true,        // NOVO: controla a borda inferior
+            borderColor: "var(--color-surface)"  // NOVO: cor da borda
         },
         
         // Launcher settings
@@ -140,7 +143,7 @@ const DASHKEY_CONFIG = {
     // BACKGROUND SETTINGS
     // ========================================
     background: {
-        image: null,                   // Background image URL
+        image: "none",                   // Background image URL
         size: "cover",
         position: "center",
         repeat: "no-repeat"
