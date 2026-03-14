@@ -454,11 +454,13 @@ function toggleCollapse(columnEl, categoryName) {
     saveCollapsedStates(states);
 }
 
-/**
- * Initialize collapsible categories
- */
+// ==============================
+// COLLAPSE CATEGORIES WITH MOBILE DETECTION
+// ==============================
+
 function initCollapsibleCategories() {
     const savedStates = loadCollapsedStates();
+    const isMobile = window.innerWidth <= 768;
     
     document.querySelectorAll('.column').forEach(column => {
         const titleEl = column.querySelector('.column-title');
@@ -478,20 +480,30 @@ function initCollapsibleCategories() {
         // Add collapse icon
         const icon = document.createElement('span');
         icon.className = 'collapse-icon';
-        icon.innerHTML = '▼'; // Down arrow
+        icon.innerHTML = '▼';
         icon.setAttribute('aria-hidden', 'true');
         titleEl.appendChild(icon);
         
-        // Apply saved state (priority) or default from config
-        if (savedStates.hasOwnProperty(categoryName)) {
-            if (savedStates[categoryName]) {
-                column.classList.add('collapsed');
+        // Determine initial state based on device
+        let shouldBeCollapsed = false;
+        
+        if (isMobile) {
+            // MOBILE: Use mobileCollapsed setting or default to true
+            shouldBeCollapsed = categoryData.mobileCollapsed !== false; // default true
+        } else {
+            // DESKTOP: Use saved state or default from config
+            if (savedStates.hasOwnProperty(categoryName)) {
+                shouldBeCollapsed = savedStates[categoryName];
+            } else {
+                shouldBeCollapsed = categoryData.collapsed === true;
             }
-        } else if (categoryData.collapsed === true) {
+        }
+        
+        if (shouldBeCollapsed) {
             column.classList.add('collapsed');
         }
         
-        // Add click handler
+        // Add click handler (works same on both devices)
         titleEl.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -508,6 +520,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Apply theme first (most important)
     const savedTheme = getSavedTheme();
     applyTheme(savedTheme || CONFIG.theme || 'default');
+
+    // Initialize clock
+    initClock();
     
     // Apply all new settings
     applySearchSettings();
@@ -1579,6 +1594,152 @@ function runLauncherSearch(query) {
 }
 
 // ==============================
+// CLOCK AND DATE FUNCTIONS - COMPLETE WITH CONFIG
+// ==============================
+
+let clockInterval = null;
+
+/**
+ * Format time with config options
+ */
+function formatTime(date) {
+    const clockConfig = CONFIG.clock || { 
+        enabled: true, 
+        format24h: true, 
+        showSeconds: false,
+        showDate: true 
+    };
+    
+    let hours, minutes, seconds;
+    
+    if (clockConfig.format24h) {
+        hours = date.getHours().toString().padStart(2, '0');
+    } else {
+        // 12-hour format
+        let h = date.getHours();
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12;
+        h = h ? h : 12; // 0 becomes 12
+        hours = h.toString();
+    }
+    
+    minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    if (clockConfig.showSeconds) {
+        seconds = date.getSeconds().toString().padStart(2, '0');
+        
+        if (clockConfig.format24h) {
+            return `${hours}:${minutes}:${seconds}`;
+        } else {
+            const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+            return `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+    } else {
+        if (clockConfig.format24h) {
+            return `${hours}:${minutes}`;
+        } else {
+            const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+            return `${hours}:${minutes} ${ampm}`;
+        }
+    }
+}
+
+/**
+ * Format date based on locale and config
+ */
+function formatDate(date) {
+    const clockConfig = CONFIG.clock || { showDate: true };
+    
+    // Don't show date if disabled
+    if (clockConfig.showDate === false) {
+        return '';
+    }
+    
+    const locale = CONFIG.locale || 'en_US';
+    
+    if (locale === 'pt_BR') {
+        return date.toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
+        }).replace(/^(\w)/, (c) => c.toUpperCase());
+    } else {
+        return date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
+        });
+    }
+}
+
+/**
+ * Update clock display
+ */
+function updateClock() {
+    const timeEl = document.getElementById('currentTime');
+    const dateEl = document.getElementById('currentDate');
+    const clockConfig = CONFIG.clock || { enabled: true };
+    
+    if (!timeEl || !dateEl) return;
+    
+    // Check if clock is enabled
+    if (clockConfig.enabled === false) {
+        const container = document.querySelector('.datetime-container');
+        if (container) container.style.display = 'none';
+        return;
+    }
+    
+    const now = new Date();
+    timeEl.textContent = formatTime(now);
+    
+    const dateStr = formatDate(now);
+    dateEl.textContent = dateStr;
+    
+    // Hide date element if string is empty
+    if (dateStr === '') {
+        dateEl.style.display = 'none';
+    } else {
+        dateEl.style.display = 'block';
+    }
+}
+
+/**
+ * Initialize clock with config
+ */
+function initClock() {
+    const clockConfig = CONFIG.clock || { 
+        enabled: true, 
+        format24h: true, 
+        showSeconds: false,
+        showDate: true 
+    };
+    
+    console.log('Initializing clock with config:', clockConfig);
+    
+    // Hide completely if disabled
+    if (clockConfig.enabled === false) {
+        const container = document.querySelector('.datetime-container');
+        if (container) container.style.display = 'none';
+        console.log('Clock disabled');
+        return;
+    }
+    
+    // Update immediately
+    updateClock();
+    
+    // Clear existing interval if any
+    if (clockInterval) {
+        clearInterval(clockInterval);
+    }
+    
+    // Update interval based on showSeconds
+    const intervalTime = clockConfig.showSeconds ? 1000 : 60000; // 1s or 1min
+    clockInterval = setInterval(updateClock, intervalTime);
+    
+    console.log(`✅ Clock initialized (update every ${intervalTime/1000}s)`);
+}
+
+// ==============================
 // EVENT LISTENERS
 // ==============================
 
@@ -1780,11 +1941,10 @@ document.addEventListener('keydown', (e) => {
 
 // Window resize handler
 window.addEventListener('resize', () => {
-    // Update isMobile on resize
-    const wasMobile = isMobile;
-    const newIsMobile = window.innerWidth <= 768;
-    
-    if (wasMobile !== newIsMobile) {
-        location.reload(); // Simple solution: reload on device change
-    }
+    // Debounce to avoid too many calls
+    clearTimeout(window.resizeTimer);
+    window.resizeTimer = setTimeout(() => {
+        // Re-initialize with new device size
+        initCollapsibleCategories();
+    }, 250);
 });

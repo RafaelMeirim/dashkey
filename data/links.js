@@ -31,6 +31,7 @@ const DASHKEY_LINKS = {
             name: "AI",
             collapsible: true,        // Can be collapsed
             collapsed: false,          // Starts expanded
+            mobileCollapsed: true,    // Mobile
             items: [
                 {
                     name: "ChatGPT",
@@ -76,6 +77,7 @@ const DASHKEY_LINKS = {
             name: "Finance",
             collapsible: true,        // Can be collapsed
             collapsed: true,           // Starts collapsed (saves space)
+            mobileCollapsed: false,    // Mobile
             items: [
                 {
                     name: "App Sobrou",

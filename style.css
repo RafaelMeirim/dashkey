@@ -237,6 +237,42 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================================
+   DATETIME DISPLAY
+   ======================================== */
+
+.datetime-container {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: var(--color-text);
+    opacity: 0.9;
+    pointer-events: none; /* Clicks pass through to header */
+    z-index: 5;
+}
+
+.time {
+    font-size: 40px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums; /* Monospace numbers */
+    letter-spacing: 1px;
+    color: var(--color-accent);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.date {
+    font-size: 12px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
    HEADER & SEARCH
    ======================================== */
 
@@ -250,6 +286,7 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     -webkit-backdrop-filter: blur(calc(var(--header-blur-enabled, 1) * var(--header-blur-amount, 8px)));
     transition: background-color 0.2s ease;
+    min-height: 80px; 
     
 }
 
@@ -292,6 +329,26 @@ h1, h2, h3, h4, h5, h6 {
 .search-input::placeholder {
     color: var(--color-text-secondary);
     opacity: 0.8;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .datetime-container {
+        display: none; /* Hide on very small screens to save space */
+    }
+}
+
+@media (max-width: 480px) {
+    .datetime-container {
+        display: none; /* Hide on very small screens to save space */
+    }
+}
+
+/* Optional: Hide on very small screens */
+@media (max-width: 380px) {
+    .datetime-container {
+        display: none;
+    }
 }
 
 /* ========================================

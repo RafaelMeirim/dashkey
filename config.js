@@ -120,6 +120,16 @@ const DASHKEY_CONFIG = {
             margin_bottom: "10px"
         }
     },
+
+    // ========================================
+    // CLOCK SETTINGS
+    // ========================================
+    clock: {
+        enabled: true,           // Show/hide clock
+        format24h: true,          // 24h or 12h format
+        showSeconds: false,       // Show seconds
+        showDate: true            // Show date
+    },
     
     // ========================================
     // ANIMATION SETTINGS
