@@ -1,4 +1,31 @@
 /* ========================================
+   FIREFOX FLICKER FIX
+   ======================================== */
+
+@-moz-document url-prefix() {
+
+    body.js-loading .column .card {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    body.js-loading .column.collapsed .card {
+        opacity: 0;
+        transform: translateY(-10px);
+        margin: 0;
+        padding: 0;
+        height: 0;
+        border: none;
+        pointer-events: none;
+    }
+
+    body:not(.js-loading) .card {
+        animation: fadeIn 0.1s ease-out;
+        transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+/* ========================================
    CSS VARIABLES
    ======================================== */
 
