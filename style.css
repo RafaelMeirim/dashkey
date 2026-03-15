@@ -1308,3 +1308,27 @@ body.no-animations *::after {
         height: 100%;
     }
 }
+
+/* ==============================
+   LOADING STATE (anti-flicker)
+   ============================== */
+
+body.js-loading {
+    overflow: hidden;
+}
+
+/* esconde busca até aplicar config */
+body.js-loading .search-input {
+    visibility: hidden;
+}
+
+/* esconde grid até renderizar */
+body.js-loading .main-grid {
+    opacity: 0;
+}
+
+/* fade suave quando aparecer */
+body:not(.js-loading) .main-grid {
+    opacity: 1;
+    transition: opacity 0.25s ease;
+}

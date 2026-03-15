@@ -590,7 +590,6 @@ function renderDashboard() {
     let html = '';
     
     LINKS.categories.forEach(category => {
-        // Skip categories with only secret items
         const visibleItems = category.items.filter(item => !item.secret);
         if (visibleItems.length === 0) return;
         
@@ -610,26 +609,22 @@ function renderDashboard() {
                 data-iconmode="${escapeHtml(item.iconmode || '')}"
             >`;
             
-            html += `<span class="icon">`;
-            html += renderIcon(item);
-            html += `</span>`;
-            
+            html += `<span class="icon">${renderIcon(item)}</span>`;
             html += `<span class="title">${escapeHtml(item.name)}</span>`;
             html += `</a>`;
         });
         
         html += `</section>`;
     });
+
+    const fragment = document.createRange().createContextualFragment(html);
+    elements.grid.replaceChildren(fragment);
     
-    elements.grid.innerHTML = html;
-    
-    // Initialize collapse after rendering
-    setTimeout(() => {
-        initCollapsibleCategories();
-        if (window.lucide) { lucide.createIcons(); }
-        buildSearchIndex();
-    }, 0);
-    
+    initCollapsibleCategories();
+    if (window.lucide) { lucide.createIcons(); }
+    buildSearchIndex();
+
+    document.body.classList.remove("js-loading");    
 }
 
 // ==============================
