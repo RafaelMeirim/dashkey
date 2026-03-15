@@ -578,6 +578,10 @@ document.addEventListener('DOMContentLoaded', function() {
         themeBtn.addEventListener("click", cycleTheme);
     }
 
+    requestAnimationFrame(() => {
+        renderDashboard();
+    });
+
 });
 
 // ==============================
@@ -1563,7 +1567,16 @@ function runLauncherSearch(query) {
             
             const MIN_SCORE = SEARCH_CONFIG.minScore;
             if (score >= MIN_SCORE) {
-                scoredResults.push({ card, score });
+                const fakeCard = {
+                    href: url,
+                    dataset: {
+                        name: name,
+                        category: 'Secret',
+                        secret: 'true'
+                    },
+                    querySelector: () => null // dummy function
+                };
+                scoredResults.push({ card: fakeCard, score });
             }
         });
     }
