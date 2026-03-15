@@ -52,6 +52,13 @@ const CONFIG = window.DASHKEY_CONFIG || {
     style_overrides: {}
 };
 
+const SEARCH_CONFIG = {
+    showHistory: CONFIG.search?.show_history !== false,
+    showFavorites: CONFIG.search?.show_favorites !== false,
+    minScore: CONFIG.search?.min_score || 20,
+    maxResults: CONFIG.search?.max_results || 10
+};
+
 // Get themes
 const THEMES = window.DASHKEY_THEMES || {};
 
@@ -545,15 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (authorMeta && CONFIG.author) {
         authorMeta.setAttribute('content', CONFIG.author);
     }
-    
-    // Render the dashboard
-    renderDashboard();
-    
-    // Initialize search index after cards are rendered
-    setTimeout(() => {
-        buildSearchIndex();
-    }, 100);
-    
+            
     // Initialize Lucide icons
     if (window.lucide) {
         lucide.createIcons();
@@ -627,14 +626,10 @@ function renderDashboard() {
     // Initialize collapse after rendering
     setTimeout(() => {
         initCollapsibleCategories();
-    }, 50);
+        if (window.lucide) { lucide.createIcons(); }
+        buildSearchIndex();
+    }, 0);
     
-    // Re-initialize Lucide icons
-    setTimeout(() => {
-        if (window.lucide) {
-            lucide.createIcons();
-        }
-    }, 100);
 }
 
 // ==============================
@@ -1081,51 +1076,52 @@ function preloadLauncherResults() {
     const cards = document.querySelectorAll(".card");
     const cardsArr = [...cards];
     
-    // Top favorites
-    if (cardsArr.length > 0) {
+    // TOP FAVORITES - só mostra se configurado
+    if (SEARCH_CONFIG.showFavorites && cardsArr.length > 0) {
         const topTitle = document.createElement("div");
         topTitle.className = "result section-title";
         topTitle.innerHTML = `<div class="result-title">⭐ ${t('top_favorites')}</div>`;
         elements.resultsBox.appendChild(topTitle);
+        
+        // Limita ao maxResults configurado
+        cardsArr
+            .sort((a, b) => (stats[b.href] || 0) - (stats[a.href] || 0))
+            .slice(0, SEARCH_CONFIG.maxResults)
+            .forEach((card, i) => {
+                results.push(card);
+                
+                const item = document.createElement("div");
+                item.className = "result";
+                if (i === 0) {
+                    item.classList.add("active");
+                    index = 0;
+                }
+                
+                const title = card.querySelector(".title")?.textContent || card.dataset.name || "Link";
+                
+                item.innerHTML = `
+                    <div class="result-title">${escapeHtml(title)}</div>
+                    <span class="result-url">${prettyUrl(card.href)}</span>
+                `;
+                
+                item.onclick = () => {
+                    trackClick(card.href);
+                    window.open(card.href, "_blank", "noopener,noreferrer");
+                    closeLauncher();
+                };
+                
+                elements.resultsBox.appendChild(item);
+            });
     }
     
-    cardsArr
-        .sort((a, b) => (stats[b.href] || 0) - (stats[a.href] || 0))
-        .slice(0, 5)
-        .forEach((card, i) => {
-            results.push(card);
-            
-            const item = document.createElement("div");
-            item.className = "result";
-            if (i === 0) {
-                item.classList.add("active");
-                index = 0;
-            }
-            
-            const title = card.querySelector(".title")?.textContent || card.dataset.name || "Link";
-            
-            item.innerHTML = `
-                <div class="result-title">${escapeHtml(title)}</div>
-                <span class="result-url">${prettyUrl(card.href)}</span>
-            `;
-            
-            item.onclick = () => {
-                trackClick(card.href);
-                window.open(card.href, "_blank", "noopener,noreferrer");
-                closeLauncher();
-            };
-            
-            elements.resultsBox.appendChild(item);
-        });
-    
-    // Search history
-    if (history.length) {
+    // SEARCH HISTORY - só mostra se configurado
+    if (SEARCH_CONFIG.showHistory && history.length) {
         const sep = document.createElement("div");
         sep.className = "result section-title";
         sep.innerHTML = `<div class="result-title">${t('recent_searches')}</div>`;
         elements.resultsBox.appendChild(sep);
         
-        history.forEach(term => {
+        history.slice(0, SEARCH_CONFIG.maxResults).forEach(term => {
             const item = document.createElement("div");
             item.className = "result";
             item.innerHTML = `
@@ -1143,7 +1139,7 @@ function preloadLauncherResults() {
         });
     }
     
-    // Tips
+    // Tips sempre aparecem
     const help = document.createElement("div");
     help.className = "result";
     help.innerHTML = `
@@ -1570,21 +1566,15 @@ function runLauncherSearch(query) {
                 }
             }
             
-            const MIN_SCORE = CONFIG.search?.min_score || 20;
+            const MIN_SCORE = SEARCH_CONFIG.minScore;
             if (score >= MIN_SCORE) {
-                scoredResults.push({
-                    card: {
-                        href: url,
-                        dataset: { name: name, keywords: keys, secret: "true" }
-                    },
-                    score
-                });
+                scoredResults.push({ card, score });
             }
         });
     }
     
     scoredResults.sort((a, b) => b.score - a.score);
-    results = scoredResults.map(r => r.card);
+    results = scoredResults.slice(0, SEARCH_CONFIG.maxResults).map(r => r.card);
     
     if (results.length > 0) {
         showResults(searchQuery);
@@ -1713,14 +1703,12 @@ function initClock() {
         showSeconds: false,
         showDate: true 
     };
-    
-    console.log('Initializing clock with config:', clockConfig);
-    
+        
     // Hide completely if disabled
     if (clockConfig.enabled === false) {
         const container = document.querySelector('.datetime-container');
         if (container) container.style.display = 'none';
-        console.log('Clock disabled');
+
         return;
     }
     
@@ -1735,8 +1723,7 @@ function initClock() {
     // Update interval based on showSeconds
     const intervalTime = clockConfig.showSeconds ? 1000 : 60000; // 1s or 1min
     clockInterval = setInterval(updateClock, intervalTime);
-    
-    console.log(`✅ Clock initialized (update every ${intervalTime/1000}s)`);
+
 }
 
 // ==============================

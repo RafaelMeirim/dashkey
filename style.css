@@ -242,6 +242,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .datetime-container {
     position: absolute;
+    align-items: center;
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
