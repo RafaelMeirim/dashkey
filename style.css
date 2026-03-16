@@ -1336,6 +1336,212 @@ body.no-animations *::after {
     }
 }
 
+/* ========================================
+   MOTIVATIONAL MESSAGES - WITH POSITIONS
+   ======================================== */
+
+/* Base styles for both positions */
+.motivational-footer {
+    width: 100%;
+    text-align: center;
+    color: var(--color-text-secondary);
+    background: transparent;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+/* Footer position (default - at bottom of content) */
+.motivational-footer.position-footer {
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 1px solid var(--color-surface);
+    position: relative;
+}
+
+/* Bottom position (fixed at bottom of screen) */
+.motivational-footer.position-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 15px 20px;
+    background: linear-gradient(to top, 
+        var(--color-bg) 0%, 
+        rgba(var(--color-bg-rgb), 0.9) 70%, 
+        transparent 100%);
+    border-top: 1px solid var(--color-surface);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    animation: slideUp 0.3s ease;
+}
+
+/* Adjust main content when message is fixed at bottom */
+body.has-fixed-message .main-grid {
+    padding-bottom: 100px;
+}
+
+body.has-fixed-message .motivational-footer.position-bottom + * {
+    margin-bottom: 80px;
+}
+
+/* Message container - same for both positions */
+.message-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Message text */
+.message-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    font-style: italic;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.message-text::before,
+.message-text::after {
+    content: '"';
+    opacity: 0.5;
+    font-size: 18px;
+}
+
+/* Message author */
+.message-author {
+    font-size: 14px;
+    color: var(--color-accent);
+    opacity: 0.8;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.message-author::before {
+    content: "— ";
+    opacity: 0.5;
+}
+
+/* Hover effect */
+.motivational-footer:hover .message-text {
+    opacity: 1;
+}
+
+/* Animation for message changes */
+.message-text, .message-author {
+    animation: messageFadeIn 0.5s ease;
+}
+
+@keyframes messageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation for bottom position slide in */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    /* Footer position mobile */
+    .motivational-footer.position-footer {
+        padding: 15px;
+        margin-top: 30px;
+    }
+    
+    /* Bottom position mobile */
+    .motivational-footer.position-bottom {
+        padding: 12px 15px;
+    }
+    
+    .message-text {
+        font-size: 14px;
+    }
+    
+    .message-author {
+        font-size: 12px;
+    }
+    
+    /* Adjust main content padding for mobile */
+    body.has-fixed-message .main-grid {
+        padding-bottom: 90px;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .motivational-footer.position-bottom {
+        padding: 10px 12px;
+    }
+    
+    .message-text {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .message-author {
+        font-size: 11px;
+    }
+    
+    body.has-fixed-message .main-grid {
+        padding-bottom: 80px;
+    }
+}
+
+/* Light theme adjustments */
+.theme-light .motivational-footer.position-footer {
+    border-top-color: var(--color-surface-hover);
+}
+
+.theme-light .motivational-footer.position-bottom {
+    background: linear-gradient(to top, 
+        var(--color-bg) 0%, 
+        rgba(255, 255, 255, 0.95) 70%, 
+        transparent 100%);
+    border-top-color: var(--color-surface-hover);
+}
+
+/* Dark theme RGB variables for gradient (add to :root) */
+:root {
+    /* Convert hex to RGB for gradients */
+    --color-bg-rgb: 15, 23, 42; /* #0f172a - default dark */
+}
+
+.theme-default { --color-bg-rgb: 15, 23, 42; }
+.theme-dracula { --color-bg-rgb: 40, 42, 54; }
+.theme-nord { --color-bg-rgb: 46, 52, 64; }
+.theme-ocean { --color-bg-rgb: 26, 38, 57; }
+.theme-midnight { --color-bg-rgb: 10, 12, 16; }
+.theme-light { --color-bg-rgb: 241, 245, 249; } /* #f1f5f9 */
+
+/* Hide footer if disabled */
+.motivational-footer.hidden {
+    display: none;
+}
+
+/* Optional: Add a subtle shadow to bottom position */
+.motivational-footer.position-bottom {
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .motivational-footer.position-bottom {
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+}
+
 /* ==============================
    LOADING STATE (anti-flicker)
    ============================== */

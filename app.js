@@ -543,6 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTypography();
     applyLayout();
     applyBackground();
+    initMotivationalMessages();
     
     // Set site title
     document.title = CONFIG.site_title || "Dashkey";
@@ -1732,6 +1733,91 @@ function initClock() {
     const intervalTime = clockConfig.showSeconds ? 1000 : 60000; // 1s or 1min
     clockInterval = setInterval(updateClock, intervalTime);
 
+}
+
+// ==============================
+// MOTIVATIONAL MESSAGES
+// ==============================
+
+let messageInterval = null;
+
+/**
+ * Initialize motivational messages
+ */
+function initMotivationalMessages() {
+    const messagesConfig = CONFIG.messages || { enabled: false };
+    
+    // Check if enabled
+    if (!messagesConfig.enabled) {
+        const footer = document.getElementById('motivationalFooter');
+        if (footer) footer.classList.add('hidden');
+        return;
+    }
+    
+    const messageText = document.getElementById('messageText');
+    const messageAuthor = document.getElementById('messageAuthor');
+    const footer = document.getElementById('motivationalFooter');
+    
+    if (!messageText || !messageAuthor || !footer) return;
+    
+    // Apply position class
+    const position = messagesConfig.position || 'footer';
+    footer.className = 'motivational-footer'; // Reset classes
+    if (position === 'bottom') {
+        footer.classList.add('position-bottom');
+        document.body.classList.add('has-fixed-message');
+    } else {
+        document.body.classList.remove('has-fixed-message');
+    }
+    
+    // Get messages array
+    const messages = messagesConfig.messages || [];
+    if (messages.length === 0) {
+        // Default message if none configured
+        messages.push({
+            text: "Todo processo acontece fora da zona de conforto.",
+            author: "Michael John Bobak"
+        });
+    }
+    
+    // Function to show random message
+    function showRandomMessage() {
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        const message = messages[randomIndex];
+        
+        messageText.textContent = message.text;
+        
+        if (messagesConfig.show_author !== false && message.author) {
+            messageAuthor.textContent = message.author;
+            messageAuthor.style.display = 'block';
+        } else {
+            messageAuthor.style.display = 'none';
+        }
+    }
+    
+    // Show initial message
+    showRandomMessage();
+    
+    // Set interval if configured
+    const interval = messagesConfig.change_interval || 0;
+    if (interval > 0) {
+        // Clear existing interval
+        if (messageInterval) {
+            clearInterval(messageInterval);
+        }
+        // Set new interval (convert seconds to milliseconds)
+        messageInterval = setInterval(showRandomMessage, interval * 1000);
+    }
+    
+    // Show footer
+    footer.classList.remove('hidden');
+}
+
+/**
+ * Update message (can be called manually if needed)
+ */
+function refreshMotivationalMessage() {
+    initMotivationalMessages();
 }
 
 // ==============================

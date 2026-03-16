@@ -158,6 +158,58 @@ const DASHKEY_CONFIG = {
         position: "center",
         repeat: "no-repeat"
     },
+
+    // ========================================
+    // MOTIVATIONAL MESSAGES SETTINGS
+    // ========================================
+    messages: {
+        enabled: true,           // show/disable - true or false
+        position: "bottom",      // "footer" ou "bottom"
+        show_author: true,
+        change_interval: 60,      // 0 = on load load, >0 = seconds
+        messages: [
+            {
+                text: "Every process happens outside the comfort zone.",
+                author: "Michael John Bobak"
+            },
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs"
+            },
+            {
+                text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+                author: "Winston Churchill"
+            },
+            {
+                text: "The future belongs to those who believe in the beauty of their dreams.",
+                author: "Eleanor Roosevelt"
+            },
+            {
+                text: "Don't watch the clock; do what it does. Keep going.",
+                author: "Sam Levenson"
+            },
+            {
+                text: "Everything you've ever wanted is on the other side of fear.",
+                author: "George Addair"
+            },
+            {
+                text: "The only limit to our realization of tomorrow will be our doubts of today.",
+                author: "Franklin D. Roosevelt"
+            },
+            {
+                text: "It does not matter how slowly you go as long as you do not stop.",
+                author: "Confucius"
+            },
+            {
+                text: "Believe you can and you're halfway there.",
+                author: "Theodore Roosevelt"
+            },
+            {
+                text: "The secret of getting ahead is getting started.",
+                author: "Mark Twain"
+            }
+        ]
+    },
     
     // ========================================
     // STYLE OVERRIDES
