@@ -1,6 +1,8 @@
 #!/bin/bash
 INSTALL_DIR="/opt/stacks/dashkey"
 
+cd ~ 2>/dev/null || true
+
 echo "🚀 Installing Dashkey..."
 
 mkdir -p "$INSTALL_DIR/data" "$INSTALL_DIR/images" "$INSTALL_DIR/icons"
@@ -17,5 +19,9 @@ docker compose up -d
 
 echo ""
 echo "✅ Dashkey installed at $INSTALL_DIR"
-echo "📝 Edit your links: $INSTALL_DIR/data/links.js"
-echo "🌐 Access at: http://localhost:3080"
+echo "📝 Edit your links:       nano $INSTALL_DIR/data/links.js"
+echo "⚙️  Edit your config:      nano $INSTALL_DIR/config.js"
+echo "🖼️  Replace background:    cp your-image.jpg $INSTALL_DIR/images/background.jpg"
+echo "🌐 Access at:             http://$(hostname -I | awk '{print $1}'):3080"
+echo ""
+echo "👉 cd $INSTALL_DIR"
