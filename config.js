@@ -153,7 +153,7 @@ const DASHKEY_CONFIG = {
     // BACKGROUND SETTINGS
     // ========================================
     background: {
-        image: "https://images.unsplash.com/photo-1637594439849-40ef084de32f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Background image URL
+        image: "/images/background.jpg", // Background image URL
         size: "cover",
         position: "center",
         repeat: "no-repeat"
