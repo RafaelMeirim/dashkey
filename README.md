@@ -4,104 +4,113 @@ A lightweight personal dashboard with a powerful launcher-style search.
 
 🔗 **Live Demo:** [https://rafaelmeirim.github.io/dashkey](https://rafaelmeirim.github.io/dashkey)
 
+---
+
 ## ✨ Features
 
-### 🔍 **Spotlight Search**
+### 🔍 Spotlight Search
 Press `Ctrl+F` anywhere to open the launcher. Start typing and watch results appear instantly with fuzzy search ranking.
 
-### 🌐 **Smart Web Search**
+### 🌐 Smart Web Search
 Type `!` followed by your search term to search across multiple engines:
 - `!python tutorial` → Search YouTube
-- `!einstein` → Search Wikipedia  
+- `!einstein` → Search Wikipedia
 - `!clean code` → Search Anna's Archive
 - `!design patterns` → Search Z-Library
 
-### 🔒 **Secret Mode**
+### 🔒 Secret Mode
 Type `@` to access hidden bookmarks. Perfect for private links that don't show up in the main grid.
 
-### 🎨 **Multiple Themes**
-Choose from 6 beautiful themes:
-- `default` - Dark theme
-- `dracula` - Dracula theme
-- `nord` - Nord theme
-- `ocean` - Ocean theme  
-- `midnight` - Midnight theme
-- `light` - Light theme
+### 🎨 Multiple Themes
+Choose from 6 beautiful themes: `default`, `dracula`, `nord`, `ocean`, `midnight`, `light`
 
-### 📱 **Mobile Friendly**
+### 📱 Mobile Friendly
 Fully responsive design that works perfectly on phones and tablets.
 
-### 📊 **Local Analytics**
+### 📊 Local Analytics
 Tracks your most used links and shows them in search results.
 
-### 🕘 **Search History**
+### 🕘 Search History
 Remembers your recent searches for quick access.
 
-### ⚡ **Blazing Fast**
-Pure HTML, CSS and JavaScript - no backend, no database, no loading times.
+### 💬 Motivational Messages
+Displays rotating motivational messages — configurable interval, position, and content.
+
+### ⚡ Blazing Fast
+Pure HTML, CSS and JavaScript — no backend, no database, no loading times.
+
+---
 
 ## 🚀 Quick Start
 
-## Option 1: GitHub Pages (Recommended - Free & Easy)
-### 1. Create a GitHub account (if you don't have one) at github.com
+### Option 1: GitHub Pages (Free & Easy)
 
-### 2. Fork the project (copy to your account)
+Perfect if you want your dashboard accessible from anywhere without a server.
 
-* Go to: https://github.com/RafaelMeirim/dashkey
+1. [Fork this repository](https://github.com/RafaelMeirim/dashkey/fork)
+2. Edit `data/links.js` directly on GitHub (click the ✏️ pencil icon)
+3. Go to **Settings → Pages**, select branch `main` and folder `/root`, click Save
+4. Wait 2 minutes — your dashboard will be live at `https://YOUR_USERNAME.github.io/dashkey`
 
-* Click the "Fork" button (top right corner)
+---
 
-* Done! Now you have your own copy of the project
+### Option 2: Self-Hosted with Docker (Recommended for homelabs)
 
-### 3. Edit your links directly on the website
+One command to install everything:
 
-* In your repository, navigate to data/links.js
-
-* Click the pencil icon (✏️) to edit
-
-* Add your links following the examples
-
-* Scroll down and click "Commit changes"
-
-### 4. Enable GitHub Pages
-
-* In your repository, go to Settings → Pages
-
-* Under "Branch", select main and folder /root
-
-* Click Save
-
-* Wait 2 minutes
-
-### Done! Your dashboard will be available at:
-https://YOUR_USERNAME.github.io/dashkey
-
-## Option 2
-### 1. Fork this repository
 ```bash
-git clone https://github.com/rafaelmeirim/dashkey.git
-cd dashkey
+curl -sSL https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/install.sh | bash
 ```
-### 2. Add your bookmarks
-For Windows/Mac/Linux users - no terminal needed:
-Edit data/links.js:
+
+This will:
+- Create `/opt/stacks/dashkey/` with your config files
+- Pull the Docker image
+- Start the container automatically
+
+Your dashboard will be available at `http://YOUR_IP:3080`
+
+**To edit your links after installation:**
 ```bash
+nano /opt/stacks/dashkey/data/links.js
+# No restart needed — just refresh the browser
+```
+
+**To replace the background image:**
+```bash
+cp your-image.jpg /opt/stacks/dashkey/images/background.jpg
+# No restart needed — just refresh the browser
+```
+
+**To uninstall:**
+```bash
+curl -sSL https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/uninstall.sh | bash
+```
+
+---
+
+## ⚙️ Configuration
+
+All configuration is done by editing the files in `/opt/stacks/dashkey/` (Docker) or directly in the repo (GitHub Pages).
+
+### Adding links — `data/links.js`
+
+```js
 {
     name: "GitHub",
     url: "https://github.com",
-    icon: "simpleicons-github",  // simpleicons-name, lucide-itens, auto (automatic icon) or direct URL
-    iconmode: "mono",             // mono, black, invert, color
+    icon: "simpleicons-github",  // simpleicons-name, lucide-name, "auto" or direct URL
+    iconmode: "mono",             // mono, color, black, invert
     keywords: ["git", "code", "repository"]
 }
 ```
-### 3. Configure your preferences
 
-Edit config.js:
-```bash
+### General settings — `config.js`
+
+```js
 {
-    locale: "en_US",              // or "pt_BR"
-    theme: "nord",             // default, dracula, nord, ocean, midnight, light
-    smart_search: [               // Customize your ! search engines
+    locale: "en_US",          // or "pt_BR"
+    theme: "nord",            // default, dracula, nord, ocean, midnight, light
+    smart_search: [           // customize your ! search engines
         {
             name: "YouTube",
             icon: "▶",
@@ -110,31 +119,92 @@ Edit config.js:
     ]
 }
 ```
-### 4. Configure your preferences
 
-* Go to repository Settings → Pages
+### Background image — `images/background.jpg`
 
-* Select branch: main → folder: /root
+Replace the file with your own image. Changes reflect immediately without restarting the container.
 
-* Click Save
-### 5. Done! 🎉
+### Favicon — `icons/favicon.ico`
 
-Your dashboard will be live at https://YOUR_USERNAME.github.io/dashkey
+Replace with your own icon. Changes reflect immediately without restarting the container.
 
-## Contributing
+### Language — `index.html`
+
+Edit the `lang` attribute to match your language:
+
+```html
+<html lang="pt-BR" translate="no">  <!-- Portuguese -->
+<html lang="en" translate="no">     <!-- English -->
+```
+
+---
+
+## 🐳 Docker — Manual Setup
+
+If you prefer to set things up manually instead of using the install script:
+
+```bash
+mkdir -p /opt/stacks/dashkey/data /opt/stacks/dashkey/images /opt/stacks/dashkey/icons
+cd /opt/stacks/dashkey
+
+curl -sO https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/config.js
+curl -sO https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/index.html
+curl -s https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/data/links.js -o data/links.js
+curl -s https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/images/background.jpg -o images/background.jpg
+curl -s https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/icons/favicon.ico -o icons/favicon.ico
+curl -sO https://raw.githubusercontent.com/rafaelmeirim/dashkey/main/docker-compose.yml
+
+docker compose up -d
+```
+
+`docker-compose.yml`:
+```yaml
+services:
+  dashkey:
+    image: rafaelmeirim/dashkey:latest
+    container_name: dashkey
+    restart: unless-stopped
+    ports:
+      - "3080:80"  # change 3080 to any available port on your host
+    volumes:
+      - ./config.js:/usr/share/nginx/html/config.js:ro
+      - ./data/links.js:/usr/share/nginx/html/data/links.js:ro
+      - ./images:/usr/share/nginx/html/images:ro
+      - ./icons:/usr/share/nginx/html/icons:ro
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+```
+
+---
+
+## 🔄 Updating
+
+To update to the latest version:
+
+```bash
+cd /opt/stacks/dashkey
+docker compose down
+docker pull rafaelmeirim/dashkey:latest
+docker compose up -d
+```
+
+---
+
+## 🤝 Contributing
+
 Contributions are welcome! Feel free to:
 
-🐛 Report bugs
+- 🐛 Report bugs
+- 💡 Suggest features
+- 🎨 Add new themes
+- 🌍 Improve translations
+- 📝 Fix documentation
 
-💡 Suggest features
+---
 
-🎨 Add new themes
+## 📄 License
 
-🌍 Improve translations
-
-📝 Fix documentation
-
-📄 License
 MIT © Rafael Meirim
 
-## ⭐ If you like this project, give it a star! ⭐
+---
+
+⭐ If you find this useful, give it a star!
