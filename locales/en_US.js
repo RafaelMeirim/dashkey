@@ -5,7 +5,7 @@
 
 const TRANSLATIONS_EN = {
     // Search related
-    search_placeholder: "Search favorites...",
+    search_placeholder: "Type anywhere to search...",
     search_fake_placeholder: "Search...",
     smart_search_placeholder: "Type to search",
     
