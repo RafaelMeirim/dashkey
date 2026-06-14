@@ -144,13 +144,15 @@ const DASHKEY_LINKS = {
                 {
                     name: "GitHub",
                     url: "https://github.com",
-                    icon: "lucide-github",
+                    icon: "simpleicons-github",
+                    iconmode: "black",
                     keywords: ["git", "code", "repository"]
                 },
                 {
                     name: "YouTube",
                     url: "https://youtube.com",
-                    icon: "lucide-youtube",
+                    icon: "simpleicons-youtube",
+                    iconmode: "mono",
                     keywords: ["video", "streaming", "watch"]
                 },
                 {
