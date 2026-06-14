@@ -7,7 +7,7 @@ services:
       - "3080:80"  # change 3080 to any available port on your host
     volumes:
       - ./config.js:/usr/share/nginx/html/config.js:ro
-      - ./data/links.js:/usr/share/nginx/html/data/links.js:ro
-      - ./images/background.jpg:/usr/share/nginx/html/images/background.jpg:ro
-      - ./icons/favicon.ico:/usr/share/nginx/html/icons/favicon.ico:ro
+      - ./data/links.js:/usr/share/nginx/html/links.js:ro
+      - ./images/background.jpg:/usr/share/nginx/html/background.jpg:ro
+      - ./icons/favicon.ico:/usr/share/nginx/html/favicon.ico:ro
       - ./index.html:/usr/share/nginx/html/index.html:ro
