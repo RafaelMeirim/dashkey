@@ -8,6 +8,6 @@ services:
     volumes:
       - ./config.js:/usr/share/nginx/html/config.js:ro
       - ./data/links.js:/usr/share/nginx/html/data/links.js:ro
-      - ./images/background.jpg:/usr/share/nginx/html/images/background.jpg:ro
-      - ./icons/favicon.ico:/usr/share/nginx/html/icons/favicon.ico:ro
+      - ./images:/usr/share/nginx/html/images:ro
+      - ./icons:/usr/share/nginx/html/icons:ro
       - ./index.html:/usr/share/nginx/html/index.html:ro
