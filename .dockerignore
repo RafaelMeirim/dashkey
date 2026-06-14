@@ -1,0 +1,8 @@
+config.js
+data/links.js
+images/background.jpg
+icons/favicon.ico
+index.html
+install.sh
+uninstall.sh
+docker-compose.yml
