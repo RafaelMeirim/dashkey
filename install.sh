@@ -17,5 +17,7 @@ docker compose up -d
 
 echo ""
 echo "✅ Dashkey installed at $INSTALL_DIR"
-echo "📝 Edit your links: $INSTALL_DIR/data/links.js"
-echo "🌐 Access at: http://localhost:3080"
+echo "📝 Edit your links: nano $INSTALL_DIR/data/links.js"
+echo "🌐 Access at: http://$(hostname -I | awk '{print $1}'):3080"
+echo ""
+echo "👉 cd $INSTALL_DIR"
